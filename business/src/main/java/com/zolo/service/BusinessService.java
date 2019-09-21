@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
-/**
- * @author jimin.jm@alibaba-inc.com
- * @date 2019/06/14
- */
+
 @Service
 public class BusinessService {
 
