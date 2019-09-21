@@ -14,10 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
-/**
- * @author jimin.jm@alibaba-inc.com
- * @date 2019/06/14
- */
+
 @SpringBootApplication
 @EnableFeignClients
 @EnableEurekaClient

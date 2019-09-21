@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-/**
- * @author jimin.jm@alibaba-inc.com
- * @date 2019/06/14
- */
+
 @Service
 public class OrderService {
 
