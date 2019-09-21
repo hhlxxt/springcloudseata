@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: business-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/fescar?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+  cloud:
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
+server:
+  port: 8084
+
+logging:
+  level:
+    com :
+      zolo : debug
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator #设置监控访问的应用根路径，默认是/actuator
+      exposure:
+        include: "*" #暴露监控访问接口，默认是/health和/info
+#显式屏蔽监控访问接口
+#management.endpoints.web.exposure.exclude=env,metrics

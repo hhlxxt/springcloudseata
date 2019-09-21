@@ -1,0 +1,35 @@
+server:
+  port: 8761
+eureka:
+  instance:
+    hostname: localhost
+    #leaseExpirationDurationInSeconds 表示eureka server距离上一次收到client的心跳之后，等待下一次心跳的超时时间，
+    #在这个时间内若没收到下一次心跳，则将移除该instance。  单位秒
+    leaseExpirationDurationInSeconds: 2
+  client:
+    #注册中心，设置为false，代表不像注册中心注册自己
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  server:
+    #关闭自我保护
+    enableSelfPreservation: false
+    # eureka server刷新readCacheMap的时间，注意，client读取的是readCacheMap，
+    #这个时间决定了多久会把readWriteCacheMap的缓存更新到readCacheMap上  默认30秒 单位毫秒
+    responseCacheUpdateIntervalMs: 100
+    # eureka server缓存readWriteCacheMap失效时间，这个只有在这个时间过去后缓存才会失效，失效前不会更新，
+    # 过期后从registry重新读取注册服务信息，registry是一个ConcurrentHashMap。
+    # 由于启用了evict其实就用不太上改这个配置了，默认180s
+    #responseCacheAutoExpirationInSeconds: 180
+
+    #evictionIntervalTimerInMs 表示eureka server清理无效节点的时间间隔，毫秒为单位 默认60000毫秒，即60秒
+    evictionIntervalTimerInMs: 1000
+management:
+  endpoints:
+    web:
+      base-path: /actuator #设置监控访问的应用根路径，默认是/actuator
+      exposure:
+        include: "*" #暴露监控访问接口，默认是/health和/info
+#显式屏蔽监控访问接口
+#management.endpoints.web.exposure.exclude=env,metrics
