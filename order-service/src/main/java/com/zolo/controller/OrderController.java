@@ -13,10 +13,10 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping(value = "/create", produces = "application/json")
-    public Boolean create(String userId, String commodityCode, Integer count) {
+    public int create(String userId, String commodityCode, Integer count) {
 
-        orderService.create(userId, commodityCode, count);
-        return true;
+        int result = orderService.create(userId, commodityCode, count);
+        return result;
     }
 
 }
