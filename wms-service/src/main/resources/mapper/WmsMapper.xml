@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zoro.persistence.WmsMapper">
+    <resultMap id="BaseResultMap" type="com.zoro.persistence.Wms">
+        <id column="wmsId" property="wmsId" jdbcType="INTEGER"/>
+        <id column="orderId" property="orderId" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="wms_status" property="wmsStatus" jdbcType="VARCHAR"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <insert id="createWms" parameterType="com.zoro.persistence.Wms">
+        INSERT INTO wms_tbl (wms_id, order_id, address,wms_status, create_time, update_time)
+         VALUES
+           (#{wmsId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+            #{wmsStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <select id="selectWmsByOrderId" parameterType="java.lang.Integer" resultType="com.zoro.persistence.Wms">
+        select
+           wms_id, order_id, address,wms_status, create_time, update_time
+        from wms_tbl
+        where order_id = #{orderId,jdbcType=INTEGER}
+    </select>
+
+</mapper>

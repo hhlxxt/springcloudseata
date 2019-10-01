@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: wms-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/fescar?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+server:
+  port: 8085
+
+logging:
+  level:
+    com.zoro.persistence : debug
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator #设置监控访问的应用根路径，默认是/actuator
+      exposure:
+        include: "*" #暴露监控访问接口，默认是/health和/info
+#显式屏蔽监控访问接口
+#management.endpoints.web.exposure.exclude=env,metrics
+
+#rocketmq配置信息
+mq :
+  nameserver : 127.0.0.1:9876
+  producer :
+    retryTimesWhenSendFailed : 3
+  groupname : wms-group
+  topic : wms-topic
+  sendMsgTimeout : 3000
+  callbakOrderWmsTopic : callbackWms-topic
