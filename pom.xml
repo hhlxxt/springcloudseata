@@ -20,6 +20,8 @@
         <module>eureka</module>
         <module>storage</module>
         <module>business</module>
+        <module>wms-service</module>
+        <module>mq-service</module>
     </modules>
 
 

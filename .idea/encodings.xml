@@ -5,7 +5,9 @@
     <file url="file://$PROJECT_DIR$/account-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/business" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mq-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/order-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/storage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/wms-service" charset="UTF-8" />
   </component>
 </project>

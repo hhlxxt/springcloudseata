@@ -44,3 +44,8 @@ management:
 
 #management.endpoints.web.exposure.exclude=env,metrics
 
+#rocketmq配置信息
+mq :
+  nameserver : 127.0.0.1:9876
+  groupname : wms-group
+  callbakOrderWmsTopic : callbackWms-topic

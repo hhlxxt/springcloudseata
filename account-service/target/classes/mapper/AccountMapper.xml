@@ -17,5 +17,10 @@
       set money = #{money,jdbcType=DECIMAL}
       where id = #{id}
     </update>
+    <update id="updateMoneyByUserId" parameterType="com.zolo.persistence.Account" >
+      update account_tbl
+      set money =money - #{money,jdbcType=DECIMAL}
+      where user_id = #{userId}
+    </update>
 
 </mapper>

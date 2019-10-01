@@ -28,3 +28,13 @@ management:
         include: "*" #暴露监控访问接口，默认是/health和/info
 #显式屏蔽监控访问接口
 #management.endpoints.web.exposure.exclude=env,metrics
+
+#rocketmq配置信息
+#rocketmq配置信息
+mq :
+  nameserver : 127.0.0.1:9876
+  producer :
+    retryTimesWhenSendFailed : 3
+  groupname : wms-group
+  topic : wms-topic
+  sendMsgTimeout : 3000

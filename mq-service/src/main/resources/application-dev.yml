@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: rocketmq-service
+
+server:
+  port: 8086
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+
+mq :
+  nameserver : 127.0.0.1:9876
+  producer :
+    retryTimesWhenSendFailed : 3
+  groupname : wms-group
+  topic : wms-topic
+  sendMsgTimeout : 3000

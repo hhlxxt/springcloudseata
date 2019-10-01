@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="accountservice" />
+        <module name="mqservice" />
         <module name="business" />
+        <module name="wmsservice" />
+        <module name="eureka" />
         <module name="storage" />
         <module name="orderservice" />
-        <module name="accountservice" />
-        <module name="eureka" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,9 +21,11 @@
       <module name="accountservice" options="-parameters" />
       <module name="business" options="-parameters" />
       <module name="eureka" options="-parameters" />
+      <module name="mqservice" options="-parameters" />
       <module name="orderservice" options="-parameters" />
       <module name="springcloudseata" options="-parameters" />
       <module name="storage" options="-parameters" />
+      <module name="wmsservice" options="-parameters" />
     </option>
   </component>
 </project>
