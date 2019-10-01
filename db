@@ -36,3 +36,15 @@ CREATE TABLE `undo_log` (
   UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `wms_tbl`;
+
+CREATE TABLE `wms_tbl` (
+  `wms_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL COMMENT '订单编号',
+  `address` varchar(1000) NOT NULL COMMENT '发货地址',
+  `wms_status` varchar(1) NOT NULL COMMENT '订单状态：0：待发货 1：已发货',
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '物流创建时间',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '物流更新是',
+  PRIMARY KEY (`wms_id`),
+  UNIQUE KEY `uni_key_index` (`order_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
