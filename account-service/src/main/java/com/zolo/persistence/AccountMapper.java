@@ -10,4 +10,6 @@ public interface AccountMapper {
 
     int updateById(Account record);
 
+    int updateMoneyByUserId(Account record);
+
 }

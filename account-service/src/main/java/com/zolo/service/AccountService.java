@@ -32,7 +32,14 @@ public class AccountService {
     }
 
     public void reduce(String userId, int money) {
-        jdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
+        Account account = new Account();
+        account.setMoney(new BigDecimal(money));
+        account.setUserId(userId);
+        int result = accountMapper.updateMoneyByUserId(account);
+        if (result == 0){
+            throw new RuntimeException("扣减用户金额失败");
+        }
+        //jdbcTemplate.update("update account_tbl set money = money - ? where user_id = ?", new Object[] {money, userId});
     }
 
 }
