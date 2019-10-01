@@ -21,7 +21,7 @@
         select
            wms_id, order_id, address,wms_status, create_time, update_time
         from wms_tbl
-        where order_id = #{orderId,jdbcType=INTEGER}
+        where order_id = #{orderId}
     </select>
 
 </mapper>
