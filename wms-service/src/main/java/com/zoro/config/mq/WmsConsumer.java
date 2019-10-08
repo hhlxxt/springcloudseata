@@ -53,10 +53,10 @@ public class WmsConsumer {
     public void init() throws MQClientException {
         this.consumer = new DefaultMQPushConsumer(groupName);
         this.consumer.setNamesrvAddr(nameSvr);
-        this.consumer.setConsumeThreadMin(10);
-        this.consumer.setConsumeThreadMax(20);
+        this.consumer.setConsumeThreadMin(2);
+        this.consumer.setConsumeThreadMax(6);
         this.consumer.subscribe(topic,"*");
-        this.consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
+        this.consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         this.consumer.registerMessageListener(new WmsMessageListener());
         try {
             this.consumer.start();
@@ -75,19 +75,19 @@ public class WmsConsumer {
             for (MessageExt messageExt:msgs) {
                 try {
                     String body = new String(messageExt.getBody());
-                    log.info("消息体:{}", JSONObject.toJSONString(body));
-                    int orderid = JSONObject.parseObject(body, int.class);
+                    log.info("消息体:{}", body);
+                    String orderNo = body;
 
                     Message message = new Message();
                     message.setTopic(callbakOrderWms);
                     Map<String,String> map = new HashMap<>();
-                    map.put("orderId",String.valueOf(orderid)) ;
+                    map.put("orderNo",orderNo) ;
                     map.put("wms_status","1");
                     message.setBody(JSONObject.toJSONString(map).getBytes());
-                    TransactionSendResult sendResult = wmsProducter.sendMessage(message,orderid);
+                    TransactionSendResult sendResult = wmsProducter.sendMessage(message,orderNo);
 
                     if (!SendStatus.SEND_OK.equals(sendResult.getSendStatus())){
-                        log.error("发送信息失败,持久化到数据库，人工处理，失败数据为：订单号：{}  物流状态:{}",orderid,1);
+                        log.error("发送信息失败,持久化到数据库，人工处理，失败数据为：订单号：{}  物流状态:{}",orderNo,1);
                     }
                 }catch (Exception e){
                     return ConsumeConcurrentlyStatus.RECONSUME_LATER ;

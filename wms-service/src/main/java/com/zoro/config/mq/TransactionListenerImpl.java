@@ -21,15 +21,15 @@ public class TransactionListenerImpl implements TransactionListener {
     private  WmsService wmsService;
     @Override
     public LocalTransactionState executeLocalTransaction(Message msg, Object arg) {
-        int orderid = (int) arg;
-        Wms result = wmsService.selectWmsByOrderId(orderid);
+        String orderNO = (String) arg;
+        Wms result = wmsService.selectWmsByOrderNo(orderNO);
         if(result != null){
             log.info("物流信息已存在{},直接投递消息到订单服务，更新订单的物流状态",result);
             return LocalTransactionState.COMMIT_MESSAGE;
         }
         Wms wms = new Wms() ;
         wms.setAddress("test");
-        wms.setOrderId(orderid);
+        wms.setOrderNO(orderNO);
         wms.setCreateTime(new Date());
         wms.setUpdateTime(new Date());
         wms.setWmsStatus("1");
@@ -52,6 +52,7 @@ public class TransactionListenerImpl implements TransactionListener {
 
     @Override
     public LocalTransactionState checkLocalTransaction(MessageExt msg) {
+        log.info("消息回查{}",msg);
         return LocalTransactionState.COMMIT_MESSAGE;
     }
 }
