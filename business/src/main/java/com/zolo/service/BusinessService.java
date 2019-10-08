@@ -1,21 +1,27 @@
 package com.zolo.service;
 
 import com.zolo.config.mq.BusinessProducter;
+import com.zolo.entity.CommonDto;
 import com.zolo.feign.OrderFeignClient;
 import com.zolo.feign.StorageFeignClient;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.LocalTransactionState;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.client.producer.SendStatus;
+import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -36,37 +42,52 @@ public class BusinessService {
     @Value("${mq.topic}")
     private String topic;
 
-    /**
-     * 减库存，下订单
-     *
-     * @param userId
-     * @param commodityCode
-     * @param orderCount
-     */
-    @GlobalTransactional
-    public void purchase(String userId, String commodityCode, int orderCount) {
-        log.info("BusinessService全局事务Id{}", RootContext.getXID());
-        storageFeignClient.deduct(commodityCode, orderCount);
 
-        int orderId = orderFeignClient.create(userId, commodityCode, orderCount);
-
-        if (!validData()) {
-            throw new RuntimeException("账户或库存不足,执行回滚");
-        }
-
+    public void business(CommonDto dto){
+        String orderNo = UUID.randomUUID().toString().replace("-","");
+        dto.setOrderNo(orderNo);
         //投递消息到mq 通知发货
         try{
             Message message = new Message();
+            Map<String,CommonDto> parameterMap = new HashMap<>();
+            parameterMap.put("dto",dto);
             message.setTopic(topic);
-            message.setBody(String.valueOf(orderId).getBytes());
-            SendResult sendResult = businessProducter.sendMessage(message,orderId);
-            if(!SendStatus.SEND_OK.equals(sendResult.getSendStatus())){
-                log.error("发送物流信息失败");
-                //TODO持久化到数据库
+            message.setBody(orderNo.getBytes());
+            TransactionSendResult sendResult = businessProducter.sendMessage(message,parameterMap);
+            if (LocalTransactionState.COMMIT_MESSAGE.equals(sendResult.getLocalTransactionState()) ) {
+                log.info("发送物流信息成功");
+            }else if (LocalTransactionState.ROLLBACK_MESSAGE.equals(sendResult.getLocalTransactionState()) ) {
+                log.info("物流信息未投递");
+            }else if (LocalTransactionState.UNKNOW.equals(sendResult.getLocalTransactionState()) ) {
+                log.info("发送物流信息未知");
             }
 
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 减库存，下订单
+     *
+     *
+     */
+    @GlobalTransactional
+    public void purchase(CommonDto dto) {
+        log.info("BusinessService全局事务Id{}", RootContext.getXID());
+        String userId = dto.getUserId();
+        String commodityCode = dto.getCommodityCode();
+        int count = dto.getOrderCount();
+        String orderNo = dto.getOrderNo();
+
+        storageFeignClient.deduct(commodityCode, count);
+
+
+        int orderId = orderFeignClient.create(userId, commodityCode,
+                count , orderNo);
+
+        if (!validData()) {
+            throw new RuntimeException("账户或库存不足,执行回滚");
         }
 
     }

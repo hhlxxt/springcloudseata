@@ -67,7 +67,7 @@ public class BusinessProducter implements InitializingBean {
      * @param message
      * @param arg
      */
-    public SendResult sendMessage(Message message, Object arg){
+    public TransactionSendResult sendMessage(Message message, Object arg){
         try {
             TransactionSendResult sendResult = this.producer.sendMessageInTransaction(message, arg);
             System.err.println(new String(message.getBody()));
