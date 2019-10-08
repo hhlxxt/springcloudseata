@@ -13,14 +13,19 @@ CREATE TABLE `storage_tbl` (
   UNIQUE KEY `commodity_code` (`commodity_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `order_tbl`;
+
 CREATE TABLE `order_tbl` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(255) DEFAULT NULL,
-  `commodity_code` varchar(255) DEFAULT NULL,
-  `count` int(11) DEFAULT '0',
-  `money` int(11) DEFAULT '0',
+  `user_id` varchar(255) DEFAULT NULL COMMENT '用户id',
+  `commodity_code` varchar(255) DEFAULT NULL COMMENT '商品id',
+  `count` int(11) DEFAULT '0' COMMENT '商品数量',
+  `money` int(11) DEFAULT '0' COMMENT '金额',
+  `wms_status` varchar(1) DEFAULT NULL COMMENT '订单状态：0：待发货 1：已发货',
+  `order_no` varchar(36) DEFAULT NULL COMMENT '订单号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `undo_log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -36,15 +41,16 @@ CREATE TABLE `undo_log` (
   UNIQUE KEY `ux_undo_log` (`xid`,`branch_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+
 DROP TABLE IF EXISTS `wms_tbl`;
 
 CREATE TABLE `wms_tbl` (
   `wms_id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) NOT NULL COMMENT '订单编号',
+  `order_no` varchar(36) NOT NULL COMMENT '订单号',
   `address` varchar(1000) NOT NULL COMMENT '发货地址',
   `wms_status` varchar(1) NOT NULL COMMENT '订单状态：0：待发货 1：已发货',
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '物流创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '物流更新是',
   PRIMARY KEY (`wms_id`),
-  UNIQUE KEY `uni_key_index` (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `uni_key_index` (`order_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8;
