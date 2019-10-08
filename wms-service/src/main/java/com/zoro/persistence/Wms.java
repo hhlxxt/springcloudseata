@@ -9,7 +9,7 @@ import java.util.Date;
 public class Wms implements Serializable {
 
     private int wmsId;
-    private int orderId;
+    private String orderNO;
     private String address;
     private String wmsStatus;
     private Date createTime;

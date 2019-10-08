@@ -24,7 +24,7 @@ public class WmsService {
         return result ;
     }
 
-    public Wms selectWmsByOrderId(int orderId){
-        return wmsMapper.selectWmsByOrderId(orderId) ;
+    public Wms selectWmsByOrderNo(String orderNo){
+        return wmsMapper.selectWmsByOrderNo(orderNo) ;
     }
 }

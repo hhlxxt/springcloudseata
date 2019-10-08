@@ -18,9 +18,9 @@ public interface WmsMapper {
     /**
      * 根据订单id获取消息物流信息
      *
-     * @param orderId
+     * @param orderNo
      * @return
      */
-    public Wms selectWmsByOrderId(int orderId);
+    public Wms selectWmsByOrderNo(String orderNo);
 
 }
