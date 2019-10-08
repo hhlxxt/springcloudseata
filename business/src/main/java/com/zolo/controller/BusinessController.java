@@ -1,5 +1,6 @@
 package com.zolo.controller;
 
+import com.zolo.entity.CommonDto;
 import com.zolo.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,11 @@ public class BusinessController {
     @RequestMapping(value = "/purchase/commit", produces = "application/json")
     public String purchaseCommit() {
         try {
-            businessService.purchase("U100000", "C100000", 30);
+            CommonDto dto = new CommonDto();
+            dto.setUserId("U100000");
+            dto.setCommodityCode("C100000");
+            dto.setOrderCount(2);
+            businessService.business(dto);
         } catch (Exception exx) {
             return exx.getMessage();
         }
@@ -36,7 +41,11 @@ public class BusinessController {
     @RequestMapping("/purchase/rollback")
     public String purchaseRollback() {
         try {
-            businessService.purchase("U100000", "C100000", 99999);
+            CommonDto dto = new CommonDto() ;
+            dto.setUserId("U100000");
+            dto.setCommodityCode("C100000");
+            dto.setOrderCount(99999);
+            businessService.business(dto);
         } catch (Exception exx) {
             return exx.getMessage();
         }
