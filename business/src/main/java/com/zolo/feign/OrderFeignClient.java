@@ -11,6 +11,7 @@ public interface OrderFeignClient {
     @GetMapping("/create")
     int create(@RequestParam("userId") String userId,
                 @RequestParam("commodityCode") String commodityCode,
-                @RequestParam("count") Integer count);
+                @RequestParam("count") Integer count,
+               @RequestParam("orderNo") String orderNo);
 
 }
