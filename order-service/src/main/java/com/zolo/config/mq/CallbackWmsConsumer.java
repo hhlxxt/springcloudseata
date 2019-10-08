@@ -40,10 +40,10 @@ public class CallbackWmsConsumer {
     public void init() throws MQClientException {
         this.consumer = new DefaultMQPushConsumer(groupName);
         this.consumer.setNamesrvAddr(nameSvr);
-        this.consumer.setConsumeThreadMin(10);
-        this.consumer.setConsumeThreadMax(20);
+        this.consumer.setConsumeThreadMin(2);
+        this.consumer.setConsumeThreadMax(6);
         this.consumer.subscribe(topic,"*");
-        this.consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
+        this.consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         this.consumer.registerMessageListener(new CallbackWmsMessageListener());
         try {
             this.consumer.start();
@@ -62,12 +62,11 @@ public class CallbackWmsConsumer {
                     log.info("消息体:{}", JSONObject.toJSONString(body));
                     Map<String,String> map = JSONObject.parseObject(body, Map.class);
                     log.info("物流信息{},更新订单状态",map);
-                    String orderId = map.get("orderId");
+                    String orderNo = map.get("orderNo");
                     String wms_status = map.get("wms_status");
-                    int result = orderService.updateOrderStatusById(Integer.parseInt(orderId), wms_status);
+                    int result = orderService.updateOrderStatusById(orderNo, wms_status);
                     if(result == 0){
-                        log.error("更新订单状态失败,订单号{}",orderId);
-                        throw new RuntimeException("更新订单状态失败,订单号{"+orderId+"}");
+                        log.error("更新订单状态失败,订单号{}不存在",orderNo);
                     }
 
                 }catch (Exception e){
